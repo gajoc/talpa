@@ -1,50 +1,35 @@
-import argparse
 import json
 
+from talpa import allegro_db as adb
 from talpa.env import ensure_env
 from talpa.provider import AllegroProvider
 from talpa.schema import AllegroQuerySchema
-from talpa.utils import read_token, dumps
+from talpa.utils import read_token
 
 default_tokens_file = '../.tokens'
-default_dump_file = '../data/search_result.json'
-
-
-ap = argparse.ArgumentParser()
-ap.add_argument('queries_file', help='path to file with allegro queries in json format',
-                nargs='?',
-                default='../queries.json')
-ap.add_argument('-c', help='query for closed only auctions', action='store_true')
-args = ap.parse_args()
+CLOSED_ITEMS_ONLY = True
 
 
 if __name__ == '__main__':
+    print(f'closed items mode is set as {CLOSED_ITEMS_ONLY}')
     env = ensure_env()
     with env.prefixed("TALPA_ALLEGRO_"):
         BASE_URL = env("BASE_URL")
 
     token = read_token(default_tokens_file)['token']
-    query_schema = AllegroQuerySchema(strict=True, many=True)
-
-    queries = json.load(open(args.queries_file, 'r'))
-    queries_loaded = query_schema.load(queries).data
-    queries_parsed = query_schema.dump(queries_loaded).data
-
-    if args.c:
-        mode = 'CLOSED'
-        for q in queries_parsed:
-            q['searchMode'] = mode
-        print(f'searchMode is {mode}')
-
     ap = AllegroProvider(token=token, base_url=BASE_URL)
 
-    for query in queries_parsed:
-        result = ap.search(query)
+    schema = AllegroQuerySchema(strict=True)
+    for q in adb.queries:
+        if CLOSED_ITEMS_ONLY:
+            q['search_mode'] = 'CLOSED'
+
+        schema.validate(q)
+        allegro_q = schema.dump(q).data
+
+        result = ap.search(allegro_q)
         if 'error' in result:
-            raise ValueError(f'got error when querying {query}, \nAPI response is\n{json.dumps(result, indent=4)}')
-        store_file_path = dumps(default_dump_file,
-                                data=result,
-                                overwrite=False,
-                                extras='closed' if args.c else None)
-        print(f'search result dumped in {store_file_path}')
-    print(f'processed {len(queries_parsed)} queries.')
+            raise ValueError(f'got error when querying {allegro_q}, \nAPI response is\n{json.dumps(result, indent=4)}')
+        adb.searches.insert(result)
+
+    print(f'processed {len(adb.queries)} queries.')
