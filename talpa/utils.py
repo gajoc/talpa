@@ -18,3 +18,5 @@ def dumps(file_path, data, overwrite):
 
     with open(final_path, 'w') as fd:
         json.dump(data, fd)
+
+    return final_path

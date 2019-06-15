@@ -33,4 +33,6 @@ if __name__ == '__main__':
 
     for query in queries_parsed:
         result = ap.search(query)
-        dumps(default_dump_file, data=result, overwrite=False)
+        store_file_path = dumps(default_dump_file, data=result, overwrite=False)
+        print(f'search result dumped in {store_file_path}')
+    print(f'processed {len(queries_parsed)} queries.')
