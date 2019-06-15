@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields, post_dump, ValidationError
 
+from talpa.utils import CustomDateTimeField
+
 
 def validate_search_mode(value):
     enum = ('REGULAR', 'DESCRIPTIONS', 'CLOSED')
@@ -34,6 +36,6 @@ class AllegroMetaDataSchema(Schema):
     Metadata appended to each search result.
     """
     vendor = fields.String(default='allegro')
-    downloaded_at = fields.DateTime()
-    processed_at = fields.DateTime()
+    downloaded_at = CustomDateTimeField()
+    processed_at = CustomDateTimeField(allow_none=True)
     origin_query = fields.Nested(AllegroQuerySchema)

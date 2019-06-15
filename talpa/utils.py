@@ -1,6 +1,9 @@
+import datetime
 import json
 import os
 import uuid
+
+from marshmallow import fields
 
 
 def read_token(file_name):
@@ -22,3 +25,10 @@ def dumps(file_path, data, overwrite, extras):
         json.dump(data, fd)
 
     return final_path
+
+
+class CustomDateTimeField(fields.DateTime):
+    def _deserialize(self, value, attr, data):
+        if isinstance(value, (datetime.datetime,)):
+            return value
+        return super()._deserialize(value, attr, data)
