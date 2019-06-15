@@ -16,11 +16,14 @@ def parse_search_query(data):
     return data
 
 
-class SearchAllegroSchema(Schema):
+class AllegroQuerySchema(Schema):
+    """
+    Query for rest api search.
+    """
     category_id = fields.String(required=True)
     phrase = fields.String(required=True)
     search_mode = fields.String(required=True, validate=validate_search_mode)
 
     @post_dump
-    def to_allegro_format(self, data):
+    def to_allegro_api_format(self, data):
         return parse_search_query(data)

@@ -3,7 +3,7 @@ import json
 
 from talpa.env import ensure_env
 from talpa.provider import AllegroProvider
-from talpa.schema import SearchAllegroSchema
+from talpa.schema import AllegroQuerySchema
 from talpa.utils import read_token, dumps
 
 default_tokens_file = '../.tokens'
@@ -24,11 +24,11 @@ if __name__ == '__main__':
         BASE_URL = env("BASE_URL")
 
     token = read_token(default_tokens_file)['token']
-    search_schema = SearchAllegroSchema(strict=True, many=True)
+    query_schema = AllegroQuerySchema(strict=True, many=True)
 
     queries = json.load(open(args.queries_file, 'r'))
-    queries_loaded = search_schema.load(queries).data
-    queries_parsed = search_schema.dump(queries_loaded).data
+    queries_loaded = query_schema.load(queries).data
+    queries_parsed = query_schema.dump(queries_loaded).data
 
     if args.c:
         mode = 'CLOSED'
