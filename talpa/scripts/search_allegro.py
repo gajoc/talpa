@@ -5,6 +5,7 @@ from talpa.env import ensure_env
 from talpa.provider import AllegroProvider
 from talpa.schema import AllegroQuerySchema
 from talpa.utils import read_token
+from talpa.utils_allegro import create_meta
 
 default_tokens_file = '../.tokens'
 CLOSED_ITEMS_ONLY = True
@@ -30,6 +31,7 @@ if __name__ == '__main__':
         result = ap.search(allegro_q)
         if 'error' in result:
             raise ValueError(f'got error when querying {allegro_q}, \nAPI response is\n{json.dumps(result, indent=4)}')
+        result['metadata'] = create_meta(q)
         adb.searches.insert(result)
 
     print(f'processed {len(adb.queries)} queries.')
