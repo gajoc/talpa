@@ -27,3 +27,13 @@ class AllegroQuerySchema(Schema):
     @post_dump
     def to_allegro_api_format(self, data):
         return parse_search_query(data)
+
+
+class AllegroMetaDataSchema(Schema):
+    """
+    Metadata appended to each search result.
+    """
+    vendor = fields.String(default='allegro')
+    downloaded_at = fields.DateTime()
+    processed_at = fields.DateTime()
+    origin_query = fields.Nested(AllegroQuerySchema)
