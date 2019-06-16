@@ -15,7 +15,7 @@ def read_token(file_name):
 def dumps(file_path, data, overwrite, extras):
     final_path = str(file_path)
 
-    extras = '' if not extras else extras+'-'
+    extras = '' if not extras else extras + '-'
 
     if not overwrite:
         root, ext = os.path.splitext(file_path)
