@@ -25,6 +25,7 @@ class AllegroQuerySchema(Schema):
     category_id = fields.String(required=True)
     phrase = fields.String(required=True)
     search_mode = fields.String(required=True, validate=validate_search_mode)
+    limit = fields.Integer(default=100)
 
     @post_dump
     def to_allegro_api_format(self, data):

@@ -28,10 +28,12 @@ if __name__ == '__main__':
         schema.validate(q)
         allegro_q = schema.dump(q).data
 
+        print(f'searching for {allegro_q}...')
         result = ap.search(allegro_q)
         if 'error' in result:
             raise ValueError(f'got error when querying {allegro_q}, \nAPI response is\n{json.dumps(result, indent=4)}')
         result['metadata'] = create_meta(q)
         adb.searches.insert(result)
+        sleep(randint(1, 3))
 
     print(f'processed {len(adb.queries)} queries.')
