@@ -79,14 +79,4 @@ class _BidsCollection(BaseCollection, ABC):
         self._a_collection.insert_multiple(bids)
 
 
-class AllegroDB:
-    _allegro_db = TinyDB('../db/allegro_db.json')
-
-    queries = _QueriesCollection(_allegro_db.table('queries'))
-    searches = _SearchesCollection(_allegro_db.table('searches'))
-    queued_items = _QueuedItemsCollection(_allegro_db.table('queued_items'))
-    items = _ItemsCollection(_allegro_db.table('items'))
-    bids = _BidsCollection(_allegro_db.table('bids'))
-
-
-allegro_db = AllegroDB
+tiny_db = TinyDB('../db/allegro_db.json')
