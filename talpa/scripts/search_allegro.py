@@ -20,3 +20,4 @@ if __name__ == '__main__':
     ah.update(interval=1)
 
     print(f'processed {len(adb.queries)} queries.')
+    print(f'items in queue {len(adb.queued_items)}.')
