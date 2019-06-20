@@ -31,6 +31,11 @@ class AllegroQuerySchema(Schema):
     def to_allegro_api_format(self, data):
         return parse_search_query(data)
 
+    @staticmethod
+    def ensure_query_for_closed_items(query):
+        query['search_mode'] = 'CLOSED'
+        return query
+
 
 class AllegroMetaDataSchema(Schema):
     """
