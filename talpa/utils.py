@@ -12,6 +12,9 @@ def read_token(file_name):
     return data
 
 
+read_json = read_token
+
+
 def dumps(file_path, data, overwrite, extras):
     final_path = str(file_path)
 
@@ -32,3 +35,33 @@ class CustomDateTimeField(fields.DateTime):
         if isinstance(value, (datetime.datetime,)):
             return value
         return super()._deserialize(value, attr, data)
+
+
+class LimitedCounter:
+
+    def __init__(self, limit, msg):
+        self.limit = limit
+        self.counter = 0
+        self.msg = msg
+
+    def __call__(self, *args, **kwargs):
+        if self.counter >= self.limit:
+            return True
+        self.counter += 1
+        return False
+
+    def __str__(self):
+        return ' '.join([self.msg, str(self.counter)])
+
+
+class VerboseCounter:
+
+    def __init__(self, msg):
+        self.msg = msg
+        self.counter = 0
+
+    def __call__(self, *args, **kwargs):
+        self.counter += 1
+
+    def __str__(self):
+        return ' '.join([self.msg, str(self.counter)])
