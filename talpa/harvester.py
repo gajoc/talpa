@@ -31,6 +31,7 @@ class AllegroHarvester:
             if 'error' in result:
                 raise ValueError(f'got error when querying {allegro_query}, \n'
                                  f'API response is\n{json.dumps(result, indent=4)}')
+            print(f'queried for {allegro_query}')
 
             result['metadata'] = create_meta(query)
             self._dump_query_result(result)
@@ -63,6 +64,7 @@ class AllegroHarvester:
             if item:
                 self._dump_downloaded_item(item)
                 count_items()
+                print(count_items)
             if bids:
                 self._dump_downloaded_bids(bids)
                 count_bids()
