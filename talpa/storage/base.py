@@ -7,6 +7,9 @@ class BaseCollection:
     def __iter__(self):
         return iter(self._a_collection)
 
+    def __len__(self):
+        return len(self._a_collection)
+
     def contains(self, id_) -> bool:
         raise NotImplementedError(self.error_msg)
 

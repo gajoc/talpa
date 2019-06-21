@@ -46,7 +46,9 @@ class _QueuedItemsCollection(BaseCollection, ABC):
         return self._a_collection.contains(Query().id == id_)
 
     def remove(self, id_):
-        self._a_collection.remove(doc_ids=[id_])
+        item = self._a_collection.get(Query().id == id_)
+        if item:
+            self._a_collection.remove(doc_ids=[item.doc_id])
 
 
 class _ItemsCollection(BaseCollection, ABC):
@@ -63,7 +65,7 @@ class _ItemsCollection(BaseCollection, ABC):
         self._a_collection.insert(item)
 
     def contains(self, id_) -> bool:
-        return self._a_collection.contains(Query().itemListInfoExt.itId == id_)
+        return self._a_collection.contains(Query().itemListInfoExt.itId == int(id_))
 
 
 class _BidsCollection(BaseCollection, ABC):
