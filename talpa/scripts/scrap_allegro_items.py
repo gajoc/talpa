@@ -1,8 +1,8 @@
-from talpa import allegro_db as adb
 from talpa.env import ensure_env
 from talpa.harvester import AllegroHarvester
 from talpa.provider import AllegroProvider
 from talpa.scripts.search_allegro import default_tokens_file
+from talpa.storage import allegro_db as adb
 from talpa.utils import read_json, read_token
 from talpa.webapi.client import AllegroClient
 

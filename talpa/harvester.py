@@ -2,11 +2,9 @@ import json
 from itertools import chain
 from time import sleep
 
-from tinydb import Query
-
-from talpa import AllegroDB
 from talpa.provider import AllegroProvider
 from talpa.schema import AllegroQuerySchema
+from talpa.storage import AllegroDB
 from talpa.utils import LimitedCounter, VerboseCounter
 from talpa.utils_allegro import create_meta
 from talpa.webapi.client import AllegroClient
@@ -20,9 +18,13 @@ class AllegroHarvester:
         self.storage = storage
         self.allegro_query_schema = AllegroQuerySchema(strict=True)
 
-    def update(self, interval):
+    def update(self, limit: int, interval):
+        limit_reached = LimitedCounter(limit, 'limit of queries reached')
 
         for query in self.storage.queries:
+            if limit_reached():
+                print(str(limit_reached))
+                break
 
             query = self.allegro_query_schema.ensure_query_for_closed_items(query)
             allegro_query = self.parse_query_to_allegro_format(query)
@@ -52,7 +54,7 @@ class AllegroHarvester:
             id_ = queued_item['id']
 
             if self.is_item_downloaded(id_):
-                self.storage.queued_items.remove(doc_ids=[queued_item.doc_id])
+                self.storage.queued_items.remove(id_)
                 print(f'skipped {id_}')
                 count_skipped()
                 continue
@@ -63,6 +65,7 @@ class AllegroHarvester:
             item, bids, present_in_service, msg = get_item_and_bids(_id=int(id_), client=client)
             if item:
                 self._dump_downloaded_item(item)
+                self.storage.queued_items.remove(id_)
                 count_items()
                 print(count_items)
             if bids:
@@ -75,12 +78,12 @@ class AllegroHarvester:
         print('\n'.join([str(count_items), str(count_bids), str(count_skipped)]))
 
     def is_item_queued(self, allegro_id):
-        if self.storage.queued_items.contains(Query().id == allegro_id):
+        if self.storage.queued_items.contains(allegro_id):
             return True
         return False
 
     def is_item_downloaded(self, allegro_id):
-        if self.storage.items.contains(Query().itemListInfoExt.itId == allegro_id):
+        if self.storage.items.contains(allegro_id):
             return True
         return False
 
@@ -95,7 +98,7 @@ class AllegroHarvester:
         self.storage.items.insert(item)
 
     def _dump_downloaded_bids(self, bids):
-        self.storage.bids.insert_multiple(bids)
+        self.storage.bids.insert(bids)
 
     @staticmethod
     def _chain_items_from_query_result(result):
