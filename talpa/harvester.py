@@ -75,7 +75,8 @@ class AllegroHarvester:
                 print(msg)
 
             sleep(interval)
-        print('\n'.join([str(count_items), str(count_bids), str(count_skipped)]))
+        print('\n'.join(['scrapping allegro finished:',
+                         '+++++++++++++++++++++++++++', str(count_items), str(count_bids), str(count_skipped)]))
 
     def is_item_queued(self, allegro_id):
         if self.storage.queued_items.contains(allegro_id):
