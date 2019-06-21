@@ -10,6 +10,7 @@ env = ensure_env()
 with env.prefixed("TALPA_ALLEGRO_"):
     BASE_URL = env("BASE_URL")
 
+MAX_QUERIES = 1000
 
 if __name__ == '__main__':
     ap = AllegroProvider(token=
@@ -19,6 +20,6 @@ if __name__ == '__main__':
     ah = AllegroHarvester(provider=ap, storage=adb)
 
     print(f'found {len(adb.queries)} queries.')
-    ah.update(limit=1, interval=1)
+    ah.update(limit=MAX_QUERIES, interval=1)
 
     print(f'items in queue {len(adb.queued_items)}.')
