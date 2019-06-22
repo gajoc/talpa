@@ -3,6 +3,7 @@ from abc import ABC
 from tinydb import Query
 from tinydb.database import Table, TinyDB
 
+from talpa.env import ensure_env
 from talpa.storage.base import BaseCollection
 
 
@@ -81,4 +82,9 @@ class _BidsCollection(BaseCollection, ABC):
         self._a_collection.insert_multiple(bids)
 
 
-tiny_db = TinyDB('../db/allegro_db.json')
+env = ensure_env()
+
+with env.prefixed("TALPA_ALLEGRO_TINYDB_"):
+    DB_FILE = env("DB_FILE")
+
+tiny_db = TinyDB(DB_FILE)
