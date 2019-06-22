@@ -3,3 +3,4 @@ environs
 marshmallow
 tinydb
 zeep
+pymongo
