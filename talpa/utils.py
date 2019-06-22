@@ -65,3 +65,8 @@ class VerboseCounter:
 
     def __str__(self):
         return ' '.join([self.msg, str(self.counter)])
+
+    def print(self, *extra_text):
+        text = [str(txt) for txt in extra_text]
+        text.append(str(self.counter))
+        print(' '.join(text))

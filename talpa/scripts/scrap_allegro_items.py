@@ -12,6 +12,8 @@ webapi_cfg = read_json('../.webapi')
 with env.prefixed("TALPA_ALLEGRO_"):
     BASE_URL = env("BASE_URL")
 
+MAX_DOWNLOAD_ITEMS = 100
+
 if __name__ == '__main__':
     ap = AllegroProvider(token=
                          read_token(default_tokens_file)['token'],
@@ -24,4 +26,4 @@ if __name__ == '__main__':
 
     ah = AllegroHarvester(provider=ap, storage=adb)
 
-    ah.run(client=c, limit=3, interval=1)
+    ah.run(client=c, limit=MAX_DOWNLOAD_ITEMS, interval=1)

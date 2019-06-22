@@ -47,19 +47,24 @@ class AllegroHarvester:
         count_bids = VerboseCounter('number of downloaded bids')
         count_skipped = VerboseCounter('number of skipped items')
 
-        def by_ending_date_asc(q_item):
+        def by_ending_date(q_item):
             return q_item['publication']['endingAt']
 
-        for queued_item in sorted(self.storage.queued_items, key=by_ending_date_asc):
+        for queued_item in sorted(self.storage.queued_items, key=by_ending_date):
             id_ = queued_item['id']
 
             if self.is_item_downloaded(id_):
                 self.storage.queued_items.remove(id_)
-                print(f'skipped {id_}')
                 count_skipped()
+                count_skipped.print('skipped item',
+                                    id_,
+                                    'closed at',
+                                    by_ending_date(queued_item),
+                                    'total skipped already')
                 continue
 
             if limit_reached():
+                print(limit_reached)
                 break
 
             item, bids, present_in_service, msg = get_item_and_bids(_id=int(id_), client=client)
@@ -67,14 +72,15 @@ class AllegroHarvester:
                 self._dump_downloaded_item(item)
                 self.storage.queued_items.remove(id_)
                 count_items()
-                print(count_items)
+                count_items.print('download items limit', limit, 'got')
+                sleep(interval)
             if bids:
                 self._dump_downloaded_bids(bids)
                 count_bids()
+                sleep(interval)
             if not present_in_service:
                 print(msg)
 
-            sleep(interval)
         print('\n'.join(['scrapping allegro finished:',
                          '+++++++++++++++++++++++++++', str(count_items), str(count_bids), str(count_skipped)]))
 
