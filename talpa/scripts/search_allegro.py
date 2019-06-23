@@ -24,4 +24,4 @@ if __name__ == '__main__':
     print(f'found {len(adb.queries)} queries.')
     ah.update(limit=MAX_QUERIES, interval=1)
 
-    print(f'items in queue {len(adb.queued_items)}.')
+    print(f'items awaiting in queue {len(adb.queued_items)}.')

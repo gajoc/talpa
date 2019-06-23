@@ -81,7 +81,8 @@ class AllegroHarvester:
                 count_bids()
                 sleep(interval)
             if not present_in_service:
-                print(msg)
+                self.storage.queued_items.remove(id_)
+                print('download item', id_, 'failed:', msg)
 
         print('\n'.join(['scrapping allegro finished:',
                          '+++++++++++++++++++++++++++', str(count_items), str(count_bids), str(count_skipped)]))

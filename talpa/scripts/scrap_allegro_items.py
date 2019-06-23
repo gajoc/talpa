@@ -28,3 +28,5 @@ if __name__ == '__main__':
     ah = AllegroHarvester(provider=ap, storage=adb)
 
     ah.run(client=c, limit=MAX_DOWNLOAD_ITEMS, interval=1)
+
+    print(f'items awaiting in queue {len(adb.queued_items)}.')
