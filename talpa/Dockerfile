@@ -4,11 +4,11 @@ MAINTAINER Pawel Maciejski <pawel.maciejski@gmail.com>
 
 RUN apk add --upgrade --no-cache \
     bash \
-    curl && \
+    curl \
+    libxslt-dev && \
     apk add --no-cache --virtual .build-dependencies \
     build-base \
     libxml2-dev \
-    libxslt-dev \
     linux-headers \
     python3-dev
 
