@@ -4,7 +4,7 @@ from time import sleep
 
 from talpa.provider import AllegroProvider
 from talpa.schema import AllegroQuerySchema
-from talpa.storage import AllegroDB
+from talpa.storage import AllegroMongoDB
 from talpa.utils import LimitedCounter, VerboseCounter
 from talpa.utils_allegro import create_meta
 from talpa.webapi.client import AllegroClient

@@ -1,25 +1,25 @@
 from talpa.env import ensure_env
-from talpa.storage.tinydb import tiny_db, _QueriesCollection, _SearchesCollection, _QueuedItemsCollection, \
+from talpa.storage.mongo import mongo_db, _QueriesCollection, _SearchesCollection, _QueuedItemsCollection, \
     _ItemsCollection, _BidsCollection
 
 
 env = ensure_env()
 
-with env.prefixed("TALPA_ALLEGRO_TINYDB_"):
-    ITEMS_TABLE = 'items'
-    QUERIES_TABLE = 'queries'
-    SEARCHES_TABLE = 'searches'
-    QUEUED_ITEMS_TABLE = 'queued_items'
-    BIDS_TABLE = 'bids'
+with env.prefixed("TALPA_ALLEGRO_MONGO_"):
+    ITEMS_COLLECTION = env("ITEMS_COLLECTION")
+    QUERIES_COLLECTION = env("QUERIES_COLLECTION")
+    SEARCHES_COLLECTION = env("SEARCHES_COLLECTION")
+    QUEUED_ITEMS_COLLECTION = env("QUEUED_ITEMS_COLLECTION")
+    BIDS_COLLECTION = env("BIDS_COLLECTION")
 
 
-class AllegroDB:
+class AllegroMongoDB:
 
-    queries = _QueriesCollection(tiny_db.table(QUERIES_TABLE))
-    searches = _SearchesCollection(tiny_db.table(SEARCHES_TABLE))
-    queued_items = _QueuedItemsCollection(tiny_db.table(QUEUED_ITEMS_TABLE))
-    items = _ItemsCollection(tiny_db.table(ITEMS_TABLE))
-    bids = _BidsCollection(tiny_db.table(BIDS_TABLE))
+    queries = _QueriesCollection(mongo_db[QUERIES_COLLECTION])
+    searches = _SearchesCollection(mongo_db[SEARCHES_COLLECTION])
+    queued_items = _QueuedItemsCollection(mongo_db[QUEUED_ITEMS_COLLECTION])
+    items = _ItemsCollection(mongo_db[ITEMS_COLLECTION])
+    bids = _BidsCollection(mongo_db[BIDS_COLLECTION])
 
 
-allegro_db = AllegroDB
+allegro_db = AllegroMongoDB
