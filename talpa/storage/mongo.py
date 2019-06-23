@@ -53,16 +53,12 @@ class _QueuedItemsCollection(MongoBaseCollection, ABC):
         self._a_collection.insert_one(queued_item)
 
     def contains(self, id_) -> bool:
-        # return self._a_collection.find(Query().id == id_)
         result = self._a_collection.find_one({'id': str(id_)})
         if result:
             return True
         return False
 
     def remove(self, id_):
-        # item = self._a_collection.get(Query().id == id_)
-        # if item:
-        #     self._a_collection.remove(doc_ids=[item.doc_id])
         self._a_collection.delete_many({'id': str(id_)})
 
 
@@ -80,7 +76,6 @@ class _ItemsCollection(MongoBaseCollection, ABC):
         self._a_collection.insert_one(item)
 
     def contains(self, id_) -> bool:
-        # return self._a_collection.find(Query().itemListInfoExt.itId == int(id_))
         result = self._a_collection.find_one({'itemListInfoExt.itId': int(id_)})
         if result:
             return True
