@@ -32,6 +32,10 @@ def populate(collection, documents):
     result = collection.insert_many(documents)
     print(f'migration of {collection} done, inserted {len(result.inserted_ids)} documents')
 
+# how do dump mongo data
+# mongodump --out /data/backup/date like mongodump --out /data/backup/2019-06-23
+# location /data/backup is binded with host folder in ~ dir (see docker-compose file)
+
 
 populate(collection=db[ITEMS_COLLECTION], documents=list(adb.items))
 
