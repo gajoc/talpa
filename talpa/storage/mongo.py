@@ -81,7 +81,7 @@ class _ItemsCollection(MongoBaseCollection, ABC):
 
     def contains(self, id_) -> bool:
         # return self._a_collection.find(Query().itemListInfoExt.itId == int(id_))
-        result = self._a_collection.find_one({'itemListInfoExt.itId': str(id_)})
+        result = self._a_collection.find_one({'itemListInfoExt.itId': int(id_)})
         if result:
             return True
         return False
