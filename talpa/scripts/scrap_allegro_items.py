@@ -22,7 +22,8 @@ if __name__ == '__main__':
     c = AllegroClient(url=webapi_cfg['URL'],
                       web_key=webapi_cfg['KEY'],
                       country_id=webapi_cfg['COUNTRY_ID'],
-                      user=webapi_cfg['USER'])
+                      user=webapi_cfg['USER'],
+                      password=webapi_cfg['PASSWORD'])
 
     ah = AllegroHarvester(provider=ap, storage=adb)
 

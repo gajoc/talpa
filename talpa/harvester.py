@@ -13,7 +13,7 @@ from talpa.webapi.utils import get_item_and_bids
 
 class AllegroHarvester:
 
-    def __init__(self, provider: AllegroProvider, storage: AllegroDB):
+    def __init__(self, provider: AllegroProvider, storage: AllegroMongoDB):
         self.provider = provider
         self.storage = storage
         self.allegro_query_schema = AllegroQuerySchema(strict=True)
@@ -72,7 +72,9 @@ class AllegroHarvester:
                 self._dump_downloaded_item(item)
                 self.storage.queued_items.remove(id_)
                 count_items()
-                count_items.print('download items limit', limit, 'got')
+                count_items.print('download item', id_,
+                                  'ended at', by_ending_date(queued_item),
+                                  'limit is', limit, 'current')
                 sleep(interval)
             if bids:
                 self._dump_downloaded_bids(bids)
