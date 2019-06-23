@@ -31,7 +31,7 @@ class AllegroClient(object):
     Allegro client to interact with Allegro API web service.
     """
 
-    def __init__(self, url, web_key, country_id, user=None):
+    def __init__(self, url, web_key, country_id, user=None, password=None):
         '''
         :param url: allegro web api service address.
         :type url: str
@@ -55,7 +55,7 @@ class AllegroClient(object):
         self._web_key = web_key
         self._country_id = country_id
         self._user = user
-        self._password = None
+        self._password = password
 
         # allegro response settings
         self._client = zeep.Client(wsdl=self._url)
