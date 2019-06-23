@@ -20,4 +20,4 @@ services:
       - 27017:27017
     volumes:
       - ~/talpa_mongo_data:/data/db
-      - ~/talpa_backup:/data/backup
+      - /media/sf_talpa_backup:/data/backup
