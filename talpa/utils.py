@@ -1,7 +1,5 @@
 import datetime
 import json
-import os
-import uuid
 
 from marshmallow import fields
 
@@ -13,21 +11,6 @@ def read_token(file_name):
 
 
 read_json = read_token
-
-
-def dumps(file_path, data, overwrite, extras):
-    final_path = str(file_path)
-
-    extras = '' if not extras else extras + '-'
-
-    if not overwrite:
-        root, ext = os.path.splitext(file_path)
-        final_path = ''.join([root, '-', extras, str(uuid.uuid1()), ext])
-
-    with open(final_path, 'w') as fd:
-        json.dump(data, fd)
-
-    return final_path
 
 
 class CustomDateTimeField(fields.DateTime):
