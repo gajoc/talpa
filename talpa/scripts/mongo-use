@@ -1,0 +1,13 @@
+
+location /data/backup in container is binded with /media/sf_talpa_backup location on vm machine
+location /media/sf_talpa_backup on vm machine is binded with C:\Users\pawel\talpa_backup on host
+
+
+restore single collection from backup
+mongorestore --port 27017 --db talpa --collection <collection-name> /data/backup/<backup-name>/talpa/<bson-file> --drop
+
+backup entire database
+mongodump --out /data/backup/<backup-name>
+
+restore entire database
+mongorestore --port 27017 --db <destination database> /data/backup/<backup-name>/talpa --drop
