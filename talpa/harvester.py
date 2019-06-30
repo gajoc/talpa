@@ -2,12 +2,15 @@ import json
 from itertools import chain
 from time import sleep
 
+from pymongo.errors import DuplicateKeyError
+
 from talpa.provider import AllegroProvider
-from talpa.schema import AllegroQuerySchema
-from talpa.storage import AllegroMongoDB
+from talpa.schema import AllegroQuerySchema, EbayQuerySchema
+from talpa.storage import AllegroMongoDB, EbayMongoDB
 from talpa.utils import LimitedCounter, VerboseCounter
 from talpa.utils_allegro import create_meta
 from talpa.webapi.allegro_client import AllegroClient
+from talpa.webapi.ebay_client import EbayClient
 from talpa.webapi.utils import get_item_and_bids
 
 
@@ -123,3 +126,49 @@ class AllegroHarvester:
             if self.is_item_queued(allegro_id=item['id']):
                 continue
             self.storage.queued_items.insert(item)
+
+
+class EbayHarvester:
+
+    def __init__(self, client: EbayClient, storage: EbayMongoDB):
+        self.client = client
+        self.storage = storage
+        self.ebay_query_schema = EbayQuerySchema(strict=True)
+
+    def run(self, query_limit: int, item_limit: int, interval):
+        query_limit_reached = LimitedCounter(query_limit, 'limit of queries reached')
+        items_limit_reached = LimitedCounter(item_limit, 'limit of downloaded items reached')
+        count_skipped = VerboseCounter('number of skipped items')
+        count_items = VerboseCounter('number of downloaded items')
+
+        for no, query in enumerate(self.storage.queries):
+
+            if query_limit_reached():
+                print(query_limit_reached)
+                break
+
+            self.ebay_query_schema.validate(query)
+            parsed_query = self.ebay_query_schema.dump(query).data
+            print('query no.', no, parsed_query)
+            result = self.client.search(parsed_query)
+            sleep(interval)
+
+            for item in result:
+                deserialized_item = self.client.deserialize(item)
+                try:
+                    if items_limit_reached():
+                        break
+                    self.storage.items.insert(deserialized_item)
+                    count_items()
+                    count_items.print('download item', deserialized_item['itemId'],
+                                      'ended at', deserialized_item['listingInfo']['endTime'],
+                                      'limit is', item_limit, 'current')
+                except DuplicateKeyError:
+                    count_skipped()
+
+            if items_limit_reached():
+                print(items_limit_reached)
+                break
+
+        print('\n'.join(['scrapping ebay finished:',
+                         '+++++++++++++++++++++++++++', str(count_items), str(count_skipped)]))
