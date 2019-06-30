@@ -4,3 +4,4 @@ marshmallow
 tinydb
 zeep
 pymongo
+ebaysdk
