@@ -22,14 +22,14 @@ class AllegroMongoDB:
 
 
 with env.prefixed("TALPA_EBAY_MONGO_"):
-    ITEMS_COLLECTION = env("ITEMS_COLLECTION")
-    QUERIES_COLLECTION = env("QUERIES_COLLECTION")
+    E_ITEMS_COLLECTION = env("ITEMS_COLLECTION")
+    E_QUERIES_COLLECTION = env("QUERIES_COLLECTION")
 
 
 class EbayMongoDB:
 
-    queries = _QueriesCollection(mongo_db[QUERIES_COLLECTION])
-    items = _ItemsCollectionEbay(mongo_db[ITEMS_COLLECTION])
+    queries = _QueriesCollection(mongo_db[E_QUERIES_COLLECTION])
+    items = _ItemsCollectionEbay(mongo_db[E_ITEMS_COLLECTION])
 
 
 allegro_db = AllegroMongoDB
