@@ -51,3 +51,11 @@ class AllegroMetaDataSchema(Schema):
     downloaded_at = CustomDateTimeField()
     processed_at = CustomDateTimeField(allow_none=True)
     origin_query = fields.Nested(NoParsingAllegroQuerySchema)
+
+
+class EbayQuerySchema(Schema):
+    """
+    Query for rest api search.
+    """
+    categoryId = fields.Integer(required=True)
+    keywords = fields.String(required=True)
