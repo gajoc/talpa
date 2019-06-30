@@ -4,11 +4,11 @@ from talpa.provider import AllegroProvider
 from talpa.scripts.search_allegro import default_tokens_file
 from talpa.storage import allegro_db as adb
 from talpa.utils import read_json, read_token
-from talpa.webapi.client import AllegroClient
+from talpa.webapi.allegro_client import AllegroClient
 
 env = ensure_env()
 
-webapi_cfg = read_json('../.webapi')
+webapi_cfg = read_json('../.webapi_allegro')
 with env.prefixed("TALPA_ALLEGRO_"):
     BASE_URL = env("BASE_URL")
 

@@ -1,7 +1,6 @@
 from talpa.env import ensure_env
 from talpa.storage.mongo import mongo_db, _QueriesCollection, _SearchesCollection, _QueuedItemsCollection, \
-    _ItemsCollection, _BidsCollection
-
+    _ItemsCollectionAllegro, _BidsCollection
 
 env = ensure_env()
 

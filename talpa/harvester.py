@@ -7,7 +7,7 @@ from talpa.schema import AllegroQuerySchema
 from talpa.storage import AllegroMongoDB
 from talpa.utils import LimitedCounter, VerboseCounter
 from talpa.utils_allegro import create_meta
-from talpa.webapi.client import AllegroClient
+from talpa.webapi.allegro_client import AllegroClient
 from talpa.webapi.utils import get_item_and_bids
 
 

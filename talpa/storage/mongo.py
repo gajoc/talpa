@@ -62,7 +62,7 @@ class _QueuedItemsCollection(MongoBaseCollection, ABC):
         self._a_collection.delete_many({'id': str(id_)})
 
 
-class _ItemsCollection(MongoBaseCollection, ABC):
+class _ItemsCollectionAllegro(MongoBaseCollection, ABC):
     """
     items.contains(allegro_id)
     items.insert(item) downloaded item by webapi client
