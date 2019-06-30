@@ -82,6 +82,26 @@ class _ItemsCollectionAllegro(MongoBaseCollection, ABC):
         return False
 
 
+class _ItemsCollectionEbay(MongoBaseCollection, ABC):
+    """
+    items.contains(ebay_id)
+    items.insert(item) downloaded item by webapi client
+
+    """
+
+    def __init__(self, a_collection: Collection):
+        super().__init__(a_collection)
+
+    def insert(self, item):
+        self._a_collection.insert_one(item)
+
+    def contains(self, id_) -> bool:
+        result = self._a_collection.find_one({'itemId': int(id_)})
+        if result:
+            return True
+        return False
+
+
 class _BidsCollection(MongoBaseCollection, ABC):
     """
     bids.insert_many(bids) downloaded list of bids for particular allegro item
