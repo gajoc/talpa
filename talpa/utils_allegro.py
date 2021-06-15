@@ -10,6 +10,6 @@ def create_meta(query):
         'origin_query': query,
     }
 
-    schema = AllegroMetaDataSchema(strict=True)
+    schema = AllegroMetaDataSchema()
     schema.validate(meta)
-    return schema.dump(meta).data
+    return schema.dump(meta)

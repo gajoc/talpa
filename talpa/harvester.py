@@ -19,7 +19,7 @@ class AllegroHarvester:
     def __init__(self, provider: AllegroProvider, storage: AllegroMongoDB):
         self.provider = provider
         self.storage = storage
-        self.allegro_query_schema = AllegroQuerySchema(strict=True)
+        self.allegro_query_schema = AllegroQuerySchema()
 
     def update(self, limit: int, interval):
         limit_reached = LimitedCounter(limit, 'limit of queries reached')
@@ -102,7 +102,7 @@ class AllegroHarvester:
 
     def parse_query_to_allegro_format(self, query):
         self.allegro_query_schema.validate(query)
-        return self.allegro_query_schema.dump(query).data
+        return self.allegro_query_schema.dump(query)
 
     def _dump_query_result(self, result):
         self.storage.searches.insert(result)
@@ -133,7 +133,7 @@ class EbayHarvester:
     def __init__(self, client: EbayClient, storage: EbayMongoDB):
         self.client = client
         self.storage = storage
-        self.ebay_query_schema = EbayQuerySchema(strict=True)
+        self.ebay_query_schema = EbayQuerySchema()
 
     def run(self, query_limit: int, item_limit: int, interval):
         query_limit_reached = LimitedCounter(query_limit, 'limit of queries reached')
@@ -148,7 +148,7 @@ class EbayHarvester:
                 break
 
             self.ebay_query_schema.validate(query)
-            parsed_query = self.ebay_query_schema.dump(query).data
+            parsed_query = self.ebay_query_schema.dump(query)
             print('query no.', no, parsed_query)
             result = self.client.search(parsed_query)
             sleep(interval)

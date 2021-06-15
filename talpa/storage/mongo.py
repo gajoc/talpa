@@ -125,8 +125,8 @@ with env.prefixed("TALPA_"):
     MONGO_DB_NAME = env("MONGO_DB_NAME")
 
 
-uri = "mongodb://%s:%s@%s:%s" % (
-    quote_plus(MONGO_USERNAME), quote_plus(MONGO_PASSWORD), MONGO_HOST, MONGO_PORT)
+uri = "mongodb://%s:%s@%s:%s/?authSource=%s" % (
+    quote_plus(MONGO_USERNAME), quote_plus(MONGO_PASSWORD), MONGO_HOST, MONGO_PORT, MONGO_DB_NAME)
 client = MongoClient(uri)
 
 mongo_db = client[MONGO_DB_NAME]

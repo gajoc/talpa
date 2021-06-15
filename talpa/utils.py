@@ -14,7 +14,7 @@ read_json = read_token
 
 
 class CustomDateTimeField(fields.DateTime):
-    def _deserialize(self, value, attr, data):
+    def _deserialize(self, value, attr, data, **kwargs):
         if isinstance(value, (datetime.datetime,)):
             return value
         return super()._deserialize(value, attr, data)

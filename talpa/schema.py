@@ -28,7 +28,7 @@ class AllegroQuerySchema(Schema):
     limit = fields.Integer(default=100)
 
     @post_dump
-    def to_allegro_api_format(self, data):
+    def to_allegro_api_format(self, data, many):
         return parse_search_query(data)
 
     @staticmethod
@@ -39,7 +39,7 @@ class AllegroQuerySchema(Schema):
 
 class NoParsingAllegroQuerySchema(AllegroQuerySchema):
     @post_dump
-    def to_allegro_api_format(self, data):
+    def to_allegro_api_format(self, data, many):
         return data
 
 
